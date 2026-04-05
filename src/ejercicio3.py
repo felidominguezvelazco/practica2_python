@@ -1,11 +1,24 @@
-import re
+def filtrar_spoilers(texto, palabras_spoiler):
+    palabras = texto.split()
 
-def filtrar_spoilers(texto, palabras):
-    """
-    Reemplaza en 'texto' todas las palabras de la lista 'palabras'
-    por asteriscos de la misma longitud, sin distinguir mayúsculas/minúsculas.
-    """
+    resultado = []
+
+    spoilers_lower = [p.lower() for p in palabras_spoiler]
+
     for palabra in palabras:
-        palabra = palabra.strip()
-        texto = re.sub(re.escape(palabra), '*' * len(palabra), texto, flags=re.IGNORECASE)
-    return texto                       
+        palabra_limpia = palabra.strip(".,").lower()
+
+        if palabra_limpia in spoilers_lower:
+            nueva = "*" * len(palabra_limpia)
+            
+            # mantener puntuación si tenía
+            if palabra.endswith(","):
+                nueva += ","
+            elif palabra.endswith("."):
+                nueva += "."
+
+            resultado.append(nueva)
+        else:
+            resultado.append(palabra)
+
+    return " ".join(resultado)                   
